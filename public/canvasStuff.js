@@ -1,5 +1,6 @@
 function init() {
   draw();
+  console.log("orbs", orbs);
 }
 
 // =============================================
@@ -9,10 +10,10 @@ player.locY = Math.floor(500 * Math.random() + 100);
 
 // This will get called in every single frame
 function draw() {
-  // clear the screen out so the old stuff is gone from the last frame
-  context.clearRect(0, 0, canvas.width, canvas.height);
   // reset the translation back to the default!
   context.setTransform(1, 0, 0, 1, 0, 0);
+  // clear the screen out so the old stuff is gone from the last frame
+  context.clearRect(0, 0, canvas.width, canvas.height);
 
   // clamp the camera to the player
   const camX = -player.locX + canvas.width / 2;
@@ -27,11 +28,18 @@ function draw() {
   // arg 4 = where to start on the circle in radians, 0 means at 3:00 clock
   // arg 5 = where to stop on the circle in radians, 0 means at 3:00 clock
   context.arc(player.locX, player.locY, 10, 0, Math.PI * 2);
-  context.arc(200, 200, 10, 0, Math.PI * 2);
+  // context.arc(200, 200, 10, 0, Math.PI * 2);
   context.fill();
   context.lineWidth = 3;
   context.strokeStyle = "rgb(0, 255, 0)";
   context.stroke();
+
+  orbs.forEach((orb) => {
+    context.beginPath();
+    context.fillStyle = orb.color;
+    context.arc(orb.locX, orb.locY, orb.radius, 0, Math.PI * 2);
+    context.fill();
+  });
 
   // This function will call this function (the draw func)
   // in every single frame.

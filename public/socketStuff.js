@@ -1,5 +1,3 @@
-const settings = require("../settings");
-
 // const socket = io("http://localhost:8080/");
 const socket = io("https://samer-agario.herokuapp.com/");
 
@@ -22,7 +20,7 @@ socket.on("initReturn", (data) => {
       xVector: player.xVector,
       yVector: player.yVector,
     });
-  }, Math.ceil(1000 / settings.fps));
+  }, 67);
 });
 
 socket.on("tock", (data) => {

@@ -1,0 +1,1 @@
+const fps = 15;

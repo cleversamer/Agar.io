@@ -20,7 +20,7 @@ socket.on("initReturn", (data) => {
       xVector: player.xVector,
       yVector: player.yVector,
     });
-  }, 67);
+  }, Math.ceil(1000 / fps));
 });
 
 socket.on("tock", (data) => {

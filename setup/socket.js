@@ -138,6 +138,18 @@ module.exports = (server) => {
           // means that no collision happened!
         });
     });
+
+    socket.on("disconnect", (data) => {
+      // make sure the player exists
+      if (player.data && Object.keys(player.data).length) {
+        // find out who just left... which player in players
+        const playerIndex = players.findIndex((p) => p.uid === player.data.uid);
+        if (playerIndex !== -1) {
+          players.splice(playerIndex, 1);
+          io.sockets.emit("updateLeaderBoard", getLeaderBoard());
+        }
+      }
+    });
   });
 };
 

@@ -22,7 +22,7 @@ function draw() {
     // arg 3 = radius of the arc
     // arg 4 = where to start on the circle in radians, 0 means at 3:00 clock
     // arg 5 = where to stop on the circle in radians, 0 means at 3:00 clock
-    context.arc(p.locX, p.locY, 10, 0, Math.PI * 2);
+    context.arc(p.locX, p.locY, p.radius, 0, Math.PI * 2);
     // context.arc(200, 200, 10, 0, Math.PI * 2);
     context.fill();
     context.lineWidth = 3;

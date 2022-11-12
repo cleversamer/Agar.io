@@ -8,12 +8,12 @@ const collisions = require("./collisions");
 let orbs = [];
 let players = [];
 let settings = {
-  defaultOrbs: 500,
+  defaultOrbs: 5000,
   defaultSpeed: 6,
   defaultSize: 6,
   defaultZoom: 1.5, // as the player gets bigger, the zoom needs to go out
-  worldWidth: 500,
-  worldHeight: 500,
+  worldWidth: 5000,
+  worldHeight: 5000,
 };
 
 module.exports = (server) => {
@@ -60,9 +60,9 @@ module.exports = (server) => {
       players.push(playerData);
     });
 
-    // the server sent over a tick, that means we know what direction to move the socket
+    // the client sent over a tick, that means we know what direction to move the socket
     socket.on("tick", (data) => {
-      speed = player.config.speed || settings.defaultSpeed;
+      speed = player.config.speed;
 
       // update the playerConfig object with the new direction
       // and at the same time create a local variable for this
@@ -72,18 +72,40 @@ module.exports = (server) => {
 
       if (
         (player.data.locX < 5 && player.data.xVector < 0) ||
-        (player.data.locX > 500 && xV > 0)
+        (player.data.locX > settings.worldWidth && xV > 0)
       ) {
         player.data.locY -= speed * yV;
       } else if (
         (player.data.locY < 5 && yV > 0) ||
-        (player.data.locY > 500 && yV < 0)
+        (player.data.locY > settings.worldHeight && yV < 0)
       ) {
         player.data.locX += speed * xV;
       } else {
         player.data.locX += speed * xV;
         player.data.locY -= speed * yV;
       }
+
+      let capturedOrb = collisions.checkForOrbCollisions(
+        player.data,
+        player.config,
+        orbs,
+        settings
+      );
+
+      capturedOrb
+        .then((orbIndex) => {
+          // means that a collision happened!
+
+          // we need to emit to all connected sockets
+          // that this orb has been replaced.
+          io.sockets.emit("orbSwitch", {
+            orbIndex,
+            newOrb: orbs[orbIndex],
+          });
+        })
+        .catch((err) => {
+          // means that no collision happened!
+        });
     });
   });
 };

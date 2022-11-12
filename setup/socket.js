@@ -24,7 +24,7 @@ module.exports = (server) => {
     if (players.length) {
       io.to("game").emit("tock", { players });
     }
-  }, 33);
+  }, Math.ceil(1000 / settings.fps));
 
   io.sockets.on("connection", (socket) => {
     // a player has connected
@@ -50,7 +50,7 @@ module.exports = (server) => {
           playerY: player.data.locY,
           playerScore: player.data.score,
         });
-      }, 33);
+      }, Math.ceil(1000 / settings.fps));
 
       socket.emit("initReturn", {
         orbs,

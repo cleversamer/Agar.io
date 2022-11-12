@@ -26,6 +26,13 @@ module.exports = (server) => {
 
   const io = socketio(server, socketConfig);
 
+  // issue a message to EVERY connected socket 30 fps
+  setInterval(() => {
+    if (players.length) {
+      io.to("game").emit("tock", { players });
+    }
+  }, 33);
+
   io.sockets.on("connection", (socket) => {
     // a player has connected
     let player = new Player();
@@ -43,10 +50,9 @@ module.exports = (server) => {
       // make a master player object to hold both
       player = new Player(socket.id, playerConfig, playerData);
 
-      // issue a message to EVERY connected socket 30 fps
+      // issue a message to THIS connected socket with its lock 30 fps
       setInterval(() => {
-        io.to("game").emit("tock", {
-          players,
+        socket.emit("tickTock", {
           playerX: player.data.locX,
           playerY: player.data.locY,
         });
@@ -85,6 +91,7 @@ module.exports = (server) => {
         player.data.locY -= speed * yV;
       }
 
+      // ORB COLLISION!!!
       let capturedOrb = collisions.checkForOrbCollisions(
         player.data,
         player.config,
@@ -102,6 +109,22 @@ module.exports = (server) => {
             orbIndex,
             newOrb: orbs[orbIndex],
           });
+        })
+        .catch((err) => {
+          // means that no collision happened!
+        });
+
+      // PLAYER COLLISION!!!
+      let playerDeath = collisions.checkForPlayerCollisions(
+        player.data,
+        player.config,
+        players,
+        player.socketId
+      );
+
+      playerDeath
+        .then((data) => {
+          // means that a collision happened!
         })
         .catch((err) => {
           // means that no collision happened!

@@ -24,6 +24,9 @@ socket.on("initReturn", (data) => {
 
 socket.on("tock", (data) => {
   players = data.players;
+});
+
+socket.on("tickTock", (data) => {
   player.locX = data.playerX;
   player.locY = data.playerY;
 });

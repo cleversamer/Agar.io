@@ -133,6 +133,9 @@ module.exports = (server) => {
           // we need to update LeaderBoard because EVERY connected
           // socket needs to know that the LeaderBoard has changed
           io.sockets.emit("updateLeaderBoard", getLeaderBoard());
+
+          // to notify all players that someone absorbed a player
+          io.sockets.emit("playerDeath", data);
         })
         .catch((err) => {
           // means that no collision happened!

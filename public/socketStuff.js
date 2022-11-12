@@ -46,3 +46,17 @@ socket.on("updateLeaderBoard", (topPlayers) => {
     ).innerHTML += `<li class="leaderboard-player">${p.name} - ${p.score}</li>`;
   });
 });
+
+socket.on("playerDeath", (data) => {
+  const killed = data.died.name;
+  const killer = data.killedBy.name;
+  const message = `${killed} absorbed by ${killer}`;
+
+  document.querySelector("#game-message").innerHTML = message;
+  $("#game-message").css({
+    "background-color": "#00e6e6",
+    opacity: 1,
+  });
+  $("#game-message").show();
+  $("#game-message").fadeOut(5000);
+});

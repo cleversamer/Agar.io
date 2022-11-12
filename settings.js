@@ -5,5 +5,5 @@ module.exports = {
   defaultZoom: 1.5, // as the player gets bigger, the zoom needs to go out
   worldWidth: 5000,
   worldHeight: 5000,
-  fps: 15,
+  fps: 60,
 };

@@ -1,1 +1,1 @@
-const fps = 15;
+const fps = 60;

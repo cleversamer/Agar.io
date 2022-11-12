@@ -109,6 +109,10 @@ module.exports = (server) => {
             orbIndex,
             newOrb: orbs[orbIndex],
           });
+
+          // we need to update LeaderBoard because EVERY connected
+          // socket needs to know that the LeaderBoard has changed
+          io.sockets.emit("updateLeaderBoard", getLeaderBoard());
         })
         .catch((err) => {
           // means that no collision happened!
@@ -125,6 +129,10 @@ module.exports = (server) => {
       playerDeath
         .then((data) => {
           // means that a collision happened!
+
+          // we need to update LeaderBoard because EVERY connected
+          // socket needs to know that the LeaderBoard has changed
+          io.sockets.emit("updateLeaderBoard", getLeaderBoard());
         })
         .catch((err) => {
           // means that no collision happened!
@@ -132,6 +140,13 @@ module.exports = (server) => {
     });
   });
 };
+
+function getLeaderBoard() {
+  // sort players in descending order
+  players.sort((a, b) => b.score - a.score);
+
+  return players.map(({ name, score }) => ({ name, score }));
+}
 
 // runs at the beginning of a new game
 function initGame() {

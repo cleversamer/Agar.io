@@ -25,6 +25,7 @@ h3 {
 
 #leader-board-wrapper {
   min-width: 160px;
+  max-width: 20vw;
   background-color: #800000;
   color: white;
   font-size: 18px;

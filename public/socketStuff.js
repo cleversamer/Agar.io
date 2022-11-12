@@ -34,3 +34,15 @@ socket.on("tickTock", (data) => {
 socket.on("orbSwitch", (data) => {
   orbs.splice(data.orbIndex, 1, data.newOrb);
 });
+
+socket.on("updateLeaderBoard", (topPlayers) => {
+  // Clear the leader board
+  document.querySelector(".leader-board").innerHTML = "";
+
+  // update the leader board
+  topPlayers.forEach((p) => {
+    document.querySelector(
+      ".leader-board"
+    ).innerHTML += `<li class="leaderboard-player">${p.name} - ${p.score}</li>`;
+  });
+});

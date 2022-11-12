@@ -1,14 +1,19 @@
 const socketio = require("socket.io");
 const Orb = require("../classes/Orb");
+const Player = require("../classes/Player");
+const PlayerConfig = require("../classes/PlayerConfig");
+const PlayerData = require("../classes/PlayerData");
 
 let orbs = [];
-
-// runs at the beginning of a new game
-function initGame() {
-  for (let i = 0; i < 500; i++) {
-    orbs.push(new Orb());
-  }
-}
+let players = [];
+let settings = {
+  defaultOrbs: 500,
+  defaultSpeed: 6,
+  defaultSize: 6,
+  defaultZoom: 1.5, // as the player gets bigger, the zoom needs to go out
+  worldWidth: 500,
+  worldHeight: 500,
+};
 
 module.exports = (server) => {
   initGame();
@@ -21,16 +26,31 @@ module.exports = (server) => {
   const io = socketio(server, socketConfig);
 
   io.sockets.on("connection", (socket) => {
-    socket.emit("init", {
-      orbs,
-    });
+    // a player has connected
 
-    socket.on("disconnect", (data) => {
-      //
-    });
+    socket.on("init", (data) => {
+      // make a playerConfig object
+      let playerConfig = new PlayerConfig(settings);
 
-    socket.on("dataFromClient", (data) => {
-      //
+      // make a playerData object
+      let playerData = new PlayerData(data.playerName, settings);
+
+      // make a master player object to hold both
+      let player = new Player(socket.id, playerConfig, playerData);
+
+      socket.emit("initReturn", {
+        orbs,
+      });
+
+      // add player to players list
+      players.push(playerData);
     });
   });
 };
+
+// runs at the beginning of a new game
+function initGame() {
+  for (let i = 0; i < settings.defaultOrbs; i++) {
+    orbs.push(new Orb(settings));
+  }
+}

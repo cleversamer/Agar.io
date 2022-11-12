@@ -1,8 +1,3 @@
-function init() {
-  draw();
-  console.log("orbs", orbs);
-}
-
 // =============================================
 // ================== DRAWING ==================
 player.locX = Math.floor(500 * Math.random() + 100);

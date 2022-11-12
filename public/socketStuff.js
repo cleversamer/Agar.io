@@ -29,6 +29,7 @@ socket.on("tock", (data) => {
 socket.on("tickTock", (data) => {
   player.locX = data.playerX;
   player.locY = data.playerY;
+  document.querySelector(".player-score").innerHTML = data.playerScore;
 });
 
 socket.on("orbSwitch", (data) => {

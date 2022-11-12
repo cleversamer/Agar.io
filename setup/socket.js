@@ -4,17 +4,10 @@ const Player = require("../classes/Player");
 const PlayerConfig = require("../classes/PlayerConfig");
 const PlayerData = require("../classes/PlayerData");
 const collisions = require("./collisions");
+const settings = require("../settings");
 
 let orbs = [];
 let players = [];
-let settings = {
-  defaultOrbs: 5000,
-  defaultSpeed: 6,
-  defaultSize: 6,
-  defaultZoom: 1.5, // as the player gets bigger, the zoom needs to go out
-  worldWidth: 5000,
-  worldHeight: 5000,
-};
 
 module.exports = (server) => {
   initGame();
@@ -55,6 +48,7 @@ module.exports = (server) => {
         socket.emit("tickTock", {
           playerX: player.data.locX,
           playerY: player.data.locY,
+          playerScore: player.data.score,
         });
       }, 33);
 

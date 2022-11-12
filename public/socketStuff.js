@@ -1,4 +1,5 @@
-const socket = io("http://localhost:8080/");
+// const socket = io("http://localhost:8080/");
+const socket = io("https://samer-agario.herokuapp.com/");
 
 // this function gets called whem the user enters the game
 function init() {
